@@ -1,18 +1,39 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Here I present two functions that can be useful when you are trying to
+## inverse the same matrix a lot of times. 
 
-## Write a short comment describing this function
+## makeCacheMatrix creates a special "matrix", which can contain previous
+## inversion of the matrix
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  m <- NULL
+  set <- function(y) {
+    x <<- y
+    m <<- NULL
+  }
+  get <- function() x
+  setinverse <- function(inverse) m <<- inverse
+  getinverse <- function() m
+  list(set = set, get = get,
+       setinverse = setinverse,
+       getinverse = getinverse)
 }
 
 
-## Write a short comment describing this function
+## cacheSolve computes the inverse of the special "matrix" returned by
+## makeCacheMatrix
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  
+  m <- x$getinverse()
+  if(!is.null(m)) {
+    message("getting cached data")
+    return(m)
+  }
+  data <- x$get()
+  m <- solve(data, ...)
+  x$setinverse(m)
+  
+  ## Return a matrix that is the inverse of 'x'
+ 
+  m
 }
-
-
-## U-la-la
